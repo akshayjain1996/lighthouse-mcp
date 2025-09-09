@@ -24,6 +24,14 @@ else
   echo -e "${GREEN}Logged in as: $NPM_USER${NC}"
 fi
 
+# Check if MCP publisher is available
+if command -v mcp-publisher &> /dev/null; then
+  echo -e "${GREEN}MCP publisher found. Will attempt to publish to MCP Registry.${NC}"
+  echo -e "${YELLOW}Note: If you get authentication errors, run 'mcp-publisher login github' first.${NC}"
+else
+  echo -e "${YELLOW}MCP publisher not found. Will skip MCP Registry publish.${NC}"
+fi
+
 # Check for uncommitted changes
 if [ -d .git ]; then
   echo -e "${YELLOW}Checking for uncommitted changes...${NC}"
@@ -119,7 +127,11 @@ if command -v mcp-publisher &> /dev/null; then
   if mcp-publisher publish; then
     echo -e "${GREEN}Successfully published to MCP Registry${NC}"
   else
-    echo -e "${RED}Failed to publish to MCP Registry. Please check your authentication.${NC}"
+    echo -e "${RED}Failed to publish to MCP Registry.${NC}"
+    echo -e "${YELLOW}Common fixes:${NC}"
+    echo -e "${YELLOW}  1. Run: mcp-publisher login github${NC}"
+    echo -e "${YELLOW}  2. Ensure your GitHub account has access to the repository${NC}"
+    echo -e "${YELLOW}  3. Check that server.json name matches package.json mcpName${NC}"
     read -p "Do you want to continue anyway? (y/n): " CONTINUE_CONFIRM
     if [ "$CONTINUE_CONFIRM" != "y" ] && [ "$CONTINUE_CONFIRM" != "Y" ]; then
       echo -e "${RED}Release cancelled.${NC}"

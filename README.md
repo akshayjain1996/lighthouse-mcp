@@ -152,6 +152,22 @@ Claude will use the `get_performance_score` tool to analyze the website and retu
 
 ## Development & Release
 
+### Prerequisites
+
+Before releasing, ensure you're authenticated with both registries:
+
+**NPM Authentication:**
+```bash
+npm login
+```
+
+**MCP Registry Authentication:**
+```bash
+mcp-publisher login github
+```
+
+If your authentication tokens expire, you'll need to re-login to the respective services.
+
 ### Making Releases
 
 Use the interactive release script to publish to both NPM and the MCP Registry:
@@ -161,15 +177,16 @@ Use the interactive release script to publish to both NPM and the MCP Registry:
 ```
 
 The script will:
-1. Check for uncommitted changes
-2. Run tests (if they exist)
-3. Build the project
-4. Prompt for version bump type (patch/minor/major/custom)
-5. Update both package.json and server.json versions
-6. Create a preview of the package contents
-7. Publish to NPM
-8. Publish to MCP Registry
-9. Create git commit and tag
-10. Optionally push to remote repository
+1. Check NPM login status
+2. Check for uncommitted changes
+3. Run tests (if they exist)
+4. Build the project
+5. Prompt for version bump type (patch/minor/major/custom)
+6. Update both package.json and server.json versions
+7. Create a preview of the package contents
+8. Publish to NPM
+9. Publish to MCP Registry (if mcp-publisher is available)
+10. Create git commit and tag
+11. Optionally push to remote repository
 
 This ensures consistent releases to both registries with proper version synchronization.
