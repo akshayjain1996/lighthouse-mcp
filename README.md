@@ -14,7 +14,11 @@ An MCP server that wraps around Google's Lighthouse tool to help measure various
 
 ## Installation
 
-### Option 1: Using npx (Recommended)
+### Option 1: From MCP Registry (Recommended)
+
+This server is available in the [Model Context Protocol Registry](https://registry.modelcontextprotocol.io/servers/io.github.priyankark/lighthouse-mcp). Install it using your MCP client or Claude Desktop.
+
+### Option 2: Using npx
 
 You can run the tool directly using npx without installation:
 
@@ -22,9 +26,9 @@ You can run the tool directly using npx without installation:
 npx lighthouse-mcp
 ```
 
-### Option 2: Global Installation
+### Option 3: Global Installation
 
-Install the package globally:
+Install the package globally from npm:
 
 ```bash
 npm install -g lighthouse-mcp
@@ -36,7 +40,7 @@ Then run it:
 lighthouse-mcp
 ```
 
-### Option 3: Local Development
+### Option 4: Local Development
 
 1. Clone this repository
 2. Install dependencies:
@@ -145,3 +149,27 @@ Claude will use the `get_performance_score` tool to analyze the website and retu
 
 - Node.js 16+
 - Chrome/Chromium browser (for Lighthouse)
+
+## Development & Release
+
+### Making Releases
+
+Use the interactive release script to publish to both NPM and the MCP Registry:
+
+```bash
+./release.sh
+```
+
+The script will:
+1. Check for uncommitted changes
+2. Run tests (if they exist)
+3. Build the project
+4. Prompt for version bump type (patch/minor/major/custom)
+5. Update both package.json and server.json versions
+6. Create a preview of the package contents
+7. Publish to NPM
+8. Publish to MCP Registry
+9. Create git commit and tag
+10. Optionally push to remote repository
+
+This ensures consistent releases to both registries with proper version synchronization.
