@@ -2,8 +2,6 @@
 
 An MCP server that wraps around Google's Lighthouse tool to help measure various performance metrics for web pages.
 
-![Lighthouse MCP Server Screenshot](screenshot.png)
-
 ## Features
 
 - Run comprehensive Lighthouse audits on any URL
@@ -150,43 +148,7 @@ Claude will use the `get_performance_score` tool to analyze the website and retu
 - Node.js 16+
 - Chrome/Chromium browser (for Lighthouse)
 
-## Development & Release
-
-### Prerequisites
-
-Before releasing, ensure you're authenticated with both registries:
-
-**NPM Authentication:**
-```bash
-npm login
-```
-
-**MCP Registry Authentication:**
-```bash
-mcp-publisher login github
-```
-
-If your authentication tokens expire, you'll need to re-login to the respective services.
-
-### Making Releases
-
-Use the interactive release script to publish to both NPM and the MCP Registry:
-
-```bash
-./release.sh
-```
-
-The script will:
-1. Check NPM login status
-2. Check for uncommitted changes
-3. Run tests (if they exist)
-4. Build the project
-5. Prompt for version bump type (patch/minor/major/custom)
-6. Update both package.json and server.json versions
-7. Create a preview of the package contents
-8. Publish to NPM
-9. Publish to MCP Registry (if mcp-publisher is available)
-10. Create git commit and tag
-11. Optionally push to remote repository
-
-This ensures consistent releases to both registries with proper version synchronization.
+## Endorsements
+<a href="https://glama.ai/mcp/servers/@priyankark/lighthouse-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@priyankark/lighthouse-mcp/badge" />
+</a>
