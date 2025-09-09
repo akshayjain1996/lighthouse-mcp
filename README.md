@@ -2,8 +2,6 @@
 
 An MCP server that wraps around Google's Lighthouse tool to help measure various performance metrics for web pages.
 
-![Lighthouse MCP Server Screenshot](screenshot.png)
-
 ## Features
 
 - Run comprehensive Lighthouse audits on any URL
@@ -14,7 +12,11 @@ An MCP server that wraps around Google's Lighthouse tool to help measure various
 
 ## Installation
 
-### Option 1: Using npx (Recommended)
+### Option 1: From MCP Registry (Recommended)
+
+This server is available in the [Model Context Protocol Registry](https://registry.modelcontextprotocol.io/servers/io.github.priyankark/lighthouse-mcp). Install it using your MCP client or Claude Desktop.
+
+### Option 2: Using npx
 
 You can run the tool directly using npx without installation:
 
@@ -22,9 +24,9 @@ You can run the tool directly using npx without installation:
 npx lighthouse-mcp
 ```
 
-### Option 2: Global Installation
+### Option 3: Global Installation
 
-Install the package globally:
+Install the package globally from npm:
 
 ```bash
 npm install -g lighthouse-mcp
@@ -36,7 +38,7 @@ Then run it:
 lighthouse-mcp
 ```
 
-### Option 3: Local Development
+### Option 4: Local Development
 
 1. Clone this repository
 2. Install dependencies:

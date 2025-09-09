@@ -24,6 +24,14 @@ else
   echo -e "${GREEN}Logged in as: $NPM_USER${NC}"
 fi
 
+# Check if MCP publisher is available
+if command -v mcp-publisher &> /dev/null; then
+  echo -e "${GREEN}MCP publisher found. Will attempt to publish to MCP Registry.${NC}"
+  echo -e "${YELLOW}Note: If you get authentication errors, run 'mcp-publisher login github' first.${NC}"
+else
+  echo -e "${YELLOW}MCP publisher not found. Will skip MCP Registry publish.${NC}"
+fi
+
 # Check for uncommitted changes
 if [ -d .git ]; then
   echo -e "${YELLOW}Checking for uncommitted changes...${NC}"
@@ -87,6 +95,13 @@ fi
 NEW_VERSION=$(node -e "console.log(require('./package.json').version)")
 echo -e "${GREEN}Version updated to $NEW_VERSION${NC}"
 
+# Update server.json to match package.json version
+if [ -f "server.json" ]; then
+  echo -e "${YELLOW}Updating server.json version...${NC}"
+  npm run update-server-json
+  echo -e "${GREEN}server.json updated to version $NEW_VERSION${NC}"
+fi
+
 # Create a package to verify contents
 echo -e "${YELLOW}Creating package to verify contents...${NC}"
 npm pack
@@ -106,10 +121,32 @@ fi
 echo -e "${YELLOW}Publishing to npm...${NC}"
 npm publish
 
+# Check if MCP publisher is available and publish to MCP registry
+if command -v mcp-publisher &> /dev/null; then
+  echo -e "${YELLOW}Publishing to MCP Registry...${NC}"
+  if mcp-publisher publish; then
+    echo -e "${GREEN}Successfully published to MCP Registry${NC}"
+  else
+    echo -e "${RED}Failed to publish to MCP Registry.${NC}"
+    echo -e "${YELLOW}Common fixes:${NC}"
+    echo -e "${YELLOW}  1. Run: mcp-publisher login github${NC}"
+    echo -e "${YELLOW}  2. Ensure your GitHub account has access to the repository${NC}"
+    echo -e "${YELLOW}  3. Check that server.json name matches package.json mcpName${NC}"
+    read -p "Do you want to continue anyway? (y/n): " CONTINUE_CONFIRM
+    if [ "$CONTINUE_CONFIRM" != "y" ] && [ "$CONTINUE_CONFIRM" != "Y" ]; then
+      echo -e "${RED}Release cancelled.${NC}"
+      exit 1
+    fi
+  fi
+else
+  echo -e "${YELLOW}MCP publisher not found. Skipping MCP Registry publish.${NC}"
+  echo -e "${YELLOW}To publish to MCP Registry, install mcp-publisher and run: mcp-publisher publish${NC}"
+fi
+
 # Commit version bump if git repository exists
 if [ -d .git ]; then
   echo -e "${YELLOW}Committing version bump...${NC}"
-  git add package.json package-lock.json
+  git add package.json package-lock.json server.json 2>/dev/null || true
   git commit -m "Bump version to $NEW_VERSION"
   git tag "v$NEW_VERSION"
   
@@ -131,4 +168,8 @@ rm "lighthouse-mcp-$NEW_VERSION.tgz"
 
 echo -e "${GREEN}Release process completed successfully!${NC}"
 echo -e "${GREEN}Version $NEW_VERSION of lighthouse-mcp has been published to npm.${NC}"
+if command -v mcp-publisher &> /dev/null; then
+  echo -e "${GREEN}Version $NEW_VERSION has also been published to the MCP Registry.${NC}"
+  echo -e "${GREEN}Registry URL: https://registry.modelcontextprotocol.io/servers/io.github.priyankark/lighthouse-mcp${NC}"
+fi
 echo -e "${GREEN}Users can now run: npx lighthouse-mcp${NC}"
