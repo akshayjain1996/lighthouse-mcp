@@ -157,7 +157,12 @@ class LighthouseServer {
     }
 
     try {
-      const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless'] });
+      // Container-compatible flags: --no-sandbox required in Docker/ECS,
+      // --disable-dev-shm-usage prevents shared memory issues,
+      // --disable-gpu avoids GPU-related errors in headless mode
+      const chrome = await chromeLauncher.launch({
+        chromeFlags: ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
+      });
       
       const options: any = {
         logLevel: 'info' as const,
