@@ -13,9 +13,9 @@
   ],
   "scripts": {
     "build": "tsc && chmod +x build/index.js",
+    "prepare": "npm run build",
     "start": "node build/index.js",
     "dev": "tsc -w",
-    "prepublishOnly": "npm run build",
     "update-server-json": "node -e \"const fs=require('fs');const pkg=JSON.parse(fs.readFileSync('package.json'));const server=JSON.parse(fs.readFileSync('server.json'));server.version=pkg.version;server.packages[0].version=pkg.version;fs.writeFileSync('server.json',JSON.stringify(server,null,2));\""
   },
   "keywords": [
